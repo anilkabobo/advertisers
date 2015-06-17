@@ -6,23 +6,51 @@
 	<link rel="stylesheet" type="text/css" href="main.css">	
 </head>
 <body ng-controller="CommonController as commonCtrl">
-
+	<header class="site-header">
+		<button class="btn add-btn" ng-click="openAddAdvertiser()">+ Add advertiser</button>
+	</header>
 	<section class="wrapper">
 		<div class="main-content">
 			<ul class="main-items" ng-class="advVisibility">
-				<li ng-repeat="adv in advertisers">
+				<li ng-repeat="adv in advertisers" data-id="adv.id">
 					<ul>
 						<li ng-show="adv.name">Name: <strong ng-bind="adv.name"></strong></li>
 						<li ng-show="adv.city">City: <strong ng-bind="adv.city"></strong></li>
 						<li ng-show="adv.address">Address: <strong ng-bind="adv.address"></strong></li>
 						<li ng-show="adv.post_code">Post code: <strong ng-bind="adv.post_code"></strong></li>
 						<li ng-show="adv.tel">Telephone: <strong ng-bind="adv.tel"></strong></li>
-					</ul>					
+					</ul>
+					<button ng-click="deleteAdv(adv.id)">Delete advertiser</button>				
 				</li>
 			</ul>
 		</div>
 	</section>
-	
+	<footer class="site-footer"></footer>
+	<div class="popup-wrapper" ng-class="$parent.addAdvertVisible" ng-controller="addAdvController">
+		<div class="popup popup-form">
+			<a href="#" class="close-popup" ng-click="$parent.addAdvertVisible = 'closed'">x</a>
+			<form id="addOrUpdateAdv" ng-submit="addOrUpdateAdv($event)">
+				<ul>
+					<li>
+						<label>Name: <input type="text" name="name" ng-model="data.name"></label>
+					</li>
+					<li>
+						<label>City: <input type="text" name="city" ng-model="data.city"></label>
+					</li>
+					<li>
+						<label>Address: <input type="text" name="address" ng-model="data.address"></label>
+					</li>
+					<li>
+						<label>Post code: <input type="text" name="data.post_code" ng-model="post_code"></label>
+					</li>
+					<li>
+						<label>Telephone: <input type="text" name="data.tel" ng-model="tel"></label>
+					</li>
+				</ul>
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+	</div>
 	<script type="text/javascript" src="lib/angular.min.js" asinc></script>
 	<script type="text/javascript" src="main.js"></script>
 </body>

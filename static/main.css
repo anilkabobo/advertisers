@@ -52,6 +52,54 @@ table {
 .visible {visibility: visible !important;}
 .hidden {visibility: hidden !important;}
 
+.clearfix:after {
+	content: "";
+	display: block;
+	height: 1px;
+	width: 100%;
+	clear: both;
+}
+
+body {
+	background: #111;
+}
+
 .main-items {
 	visibility: hidden;
+	margin: 50px 0;
+	width: 100%;
+}
+
+.main-items > li {
+	width: 33.3333%;
+	height: 300px;
+	float: left;
+	background: rgba(200,200,200,0.5);
+	box-sizing: border-box;
+	padding: 1em;
+	border: 1px solid #111;
+}
+
+.popup-wrapper {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	display: none;
+}
+
+.popup-wrapper.open {
+	display: block;
+}
+
+.popup {
+	width: 500px;
+	height: 400px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -200px;
+	margin-left: -250px;
+	background: #fff;
 }
