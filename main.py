@@ -203,9 +203,14 @@ def javascripts(filename):
     return static_file(filename, root='static/js')
 
 
+@route('/')
+def index():
+    return template("index.html")
+
+
 @get('/<filename:re:.*\.css>')
 def stylesheets(filename):
-    return static_file(filename, root='static/css')
+    return static_file(filename, root='static/')
 
 
 @get('/<filename:re:.*\.(jpg|png|gif|ico)>')
