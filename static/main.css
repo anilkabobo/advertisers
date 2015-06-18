@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -12,8 +12,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -24,7 +24,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -61,7 +61,73 @@ table {
 }
 
 body {
-	background: #111;
+	background: #eee;
+	color: #222;
+	font: 18px arial, sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: #00796b;
+	transition: all 0.3s;
+}
+
+input[type="text"] {
+	background: none;
+	border: 1px solid;
+	border-color: #ccc #ccc #aaa #bbb;
+	line-height: 30px;
+	border-radius: 3px;
+	transition: all 0.3s;
+}
+
+input[type="text"]:focus {
+	background: #ddd;
+	outline: none;
+}
+
+a:hover {
+	color: #26a69a;
+}
+
+.site-header {
+	width: 100%;
+	height: 100px;
+}
+
+.page-title {
+	font-size: 3em;
+	margin: 0.3em 0 0 1em;
+}
+
+.btn {
+	border: none;
+	border-radius: 3px;
+	padding: 0.5em 1.5em;
+	color: #fff;
+	font-size: 1em;
+	transition: all 0.3s;
+	cursor: pointer;
+}
+
+.small-btn {
+	border: none;
+	border-radius: 3px;
+	padding: 0.5em 1.2em;
+	color: #fff;
+	font-size: 0.8em;
+	transition: all 0.3s;
+	cursor: pointer;
+}
+
+.add-btn {
+	background: #00796b;
+	float: right;
+	margin: 0 2em;
+}
+
+.add-btn:hover {
+	background: #07A492;
 }
 
 .main-items {
@@ -70,14 +136,93 @@ body {
 	width: 100%;
 }
 
-.main-items > li {
-	width: 33.3333%;
-	height: 300px;
+.main-item {
+	width: calc(33.3333% - 10px);
+	height: 500px;
 	float: left;
-	background: rgba(200,200,200,0.5);
+	margin: 5px;
+	background: #ddd;
 	box-sizing: border-box;
 	padding: 1em;
-	border: 1px solid #111;
+	transition: all 0.6s;
+	position: relative;
+}
+
+.main-item:hover {
+	box-shadow: 0 0 3px 1px rgba(50,50,50,0.3);
+}
+
+.delete-btn {
+	position: absolute;
+	top: 5px;
+	right: 8px;
+	line-height: 1;
+	border: none;
+	background: none;
+	font-size: 2em;
+	color: #a6266c;
+	transition: all 0.6s;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.main-item:hover .delete-btn {
+	opacity: 1;
+}
+
+.main-item-name {
+	font-size: 2em;
+	width: 100%;
+	border-bottom: 1px solid #aaa;
+	padding: 0 0 0.2em 0;
+	margin-bottom: 0.7em;
+}
+
+.main-item li, .main-item p, .main-item h3 {
+	margin-bottom: 0.5em;
+}
+
+.main-item-info {
+	float: left;
+}
+
+.block-aside {
+	float: right;
+}
+
+.add-pixel {
+	position: absolute;
+	bottom: 20px;
+}
+
+.add-pixel input[type="text"] {
+	width: 180px;
+}
+
+.add-pixel .small-btn {
+	background: #a6266c
+}
+
+.edit-btn {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	background: #00796b;
+}
+
+.delete-pxl {
+	opacity: 0;
+	transition: 0.3s all;
+	color: #a6266c;
+	vertical-align: super;
+}
+
+.delete-pxl:hover {
+	color: #a6266c;
+}
+
+.pixels-list li:hover .delete-pxl {
+	opacity: 1;
 }
 
 .popup-wrapper {
@@ -94,12 +239,68 @@ body {
 }
 
 .popup {
-	width: 500px;
-	height: 400px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	z-index: 5;
+	padding: 2em;
+	box-sizing: border-box;
+}
+
+.popup h4 {
+	font-size: 1.3em;
+	margin-bottom: 0.5em;
+}
+
+.close-popup {
+	position: absolute;
+	font-size: 1.2em;
+	line-height: 30px;
+	top: 5px;
+	right: 0;
+	width: 30px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.popup-form {
+	width: 500px;
+	height: 400px;
 	margin-top: -200px;
 	margin-left: -250px;
 	background: #fff;
+}
+
+.popup-pixel {
+	width: 300px;
+	height: 200px;
+	margin-top:-100px;
+	margin-left: -150px;
+	text-align: center;
+	background: #fff;
+
+}
+
+.popup-form li {
+	margin-bottom: 2em;
+	width: 400px;
+	clear: both;
+}
+
+.popup-form [type="text"] {
+	float: right;
+	width: 250px;
+}
+
+
+@media (max-width: 1600px) {
+	.main-item {
+		width: calc(50% - 10px);
+	}
+}
+
+@media (max-width: 1200px) {
+	.main-item {
+		width: calc(100% - 10px);
+	}
 }

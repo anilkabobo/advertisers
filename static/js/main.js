@@ -37,7 +37,7 @@ myApp.controller('CommonController', [
 
     $scope.deleteAdv = function(ind) {
       del.advertiser(ind);
-      getAllPixels();
+      $scope.getAdvertisers();
     }
 
     $scope.addPixel =function(ind) {
@@ -158,15 +158,7 @@ myApp.factory('appGetServices', function($http) {
 myApp.factory('appPostServices', function($http) {
   return {
     advertisers: function(data, callback) {
-      return $http.post('/advertisers', data).
-        success(callback).
-        error(function(data) {
-          console.log(data);
-        });
-    },
-    advertiser: function(n, data, callback) {
-      return $http.post('/advertisers/' + n, data).
-        success(callback).
+      return $http.post('/advertisers', data)
         error(function(data) {
           console.log(data);
         });

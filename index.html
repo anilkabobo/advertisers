@@ -7,15 +7,15 @@
 </head>
 <body ng-controller="CommonController as commonCtrl">
 	<header class="site-header">
-		<h1>Welcome to amazing pixels manipulator</h1>
+		<h1 class="page-title">Control your advertisers</h1>
 		<button class="btn add-btn" ng-click="openAddAdvertiser()">+ Add advertiser</button>
 	</header>
 	<section class="wrapper">
 		<div class="main-content">
 			<ul class="main-items" ng-class="advVisibility">
-				<li ng-repeat="adv in allData.advertisers" data-id="adv.id">
-					<h2 ng-bind="adv.name"></h2>
-					<ul>
+				<li class="main-item" ng-repeat="adv in allData.advertisers" data-id="adv.id">
+					<h2 class="main-item-name" ng-bind="adv.name"></h2>
+					<ul class="main-item-info">
 						<li ng-show="adv.city">City: <strong ng-bind="adv.city"></strong></li>
 						<li ng-show="adv.address">Address: <strong ng-bind="adv.address"></strong></li>
 						<li ng-show="adv.post_code">Post code: <strong ng-bind="adv.post_code"></strong></li>
@@ -26,18 +26,18 @@
 						<ul class="pixels-list">
 							<li ng-repeat="pixel in allData.pixels | filter:{advertiser_id:adv.id}">
 								<a href="" ng-bind="pixel.name" ng-click="openPixel(pixel.id)"></a>
-								<a href="" ng-click="deletePixel(pixel.id)">x</a>
+								<a href="" class="delete-pxl" ng-click="deletePixel(pixel.id)">x</a>
 							</li>
 						</ul>
 					</div>
 
 					<form class="add-pixel"  id="addPixel{{adv.id}}" ng-submit="addPixel(adv.id)">
 						<input type="text" name="name">
-						<input type="submit" value="Add pixel">
+						<input class="small-btn" type="submit" value="Add pixel">
 					</form>
 
 					<button class="delete-btn" ng-click="deleteAdv(adv.id)" title="Delete advertiser">x</button>
-					<button class="btn main-btn" ng-click="openEditAdvertiser(adv)">Edit</button>
+					<button class="btn edit-btn" ng-click="openEditAdvertiser(adv)">Edit</button>
 				</li>
 			</ul>
 		</div>
@@ -74,7 +74,7 @@
 						<label>Telephone: <input type="text" name="tel" ng-model="allData.formData.tel"></label>
 					</li>
 				</ul>
-				<input type="submit" value="Submit">
+				<input class="btn edit-btn" type="submit" value="Submit">
 			</form>
 		</div>
 	</div>
