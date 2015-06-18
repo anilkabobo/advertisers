@@ -1,59 +1,134 @@
 var myApp = angular.module('app', []);
 
-myApp.controller('CommonController', ['$scope', 'appGetServices', 'appDeleteServices', function($scope, get, del) {
-  var currentAdv = null;
-  $scope.advVisibility = 'hidden';
+myApp.controller('CommonController', [
+  '$scope',
+  'appGetServices',
+  'appDeleteServices',
+  'appPostServices',
+  'mainData',
+  function($scope, get, del, post, mainData) {
+    $scope.allData = mainData;
+    $scope.advVisibility = 'hidden';
+    $scope.pixelPopup = 'closed';
 
-  $scope.openAddAdvertiser = function() {
-    $scope.addAdvertVisible = 'open';
-    currentAdv = null;
-  }
-
-  $scope.getAdvertisers = function() {
-    get.advertisers().then(function(data) {
-      $scope.advertisers = data.data;
-      $scope.advVisibility = 'visible';
-    });
-  }
-
-  $scope.deleteAdv = function(ind) {
-    del.advertiser(ind);
-    $scope.getAdvertisers();
-  }
-
-  $scope.getAdvertisers();
-
-}]);
-
-myApp.controller('addAdvController', ['$scope', 'appPostServices', function($scope, post) {  
-
-  function setDefaults() {
-    $scope.data = {
-      name: '',
-      city: '',
-      address: '',
-      tel: '',
-      post_code: ''
+    $scope.openAddAdvertiser = function() {
+      $scope.addAdvertVisible = 'open';
+      $scope.allData.currentAdv = null;
     }
-    
+
+    $scope.openEditAdvertiser = function(adv) {
+      $scope.allData.currentAdv = adv.id;
+      $scope.addAdvertVisible = 'open';
+      $scope.allData.formData = {
+        name: adv.name,
+        city: adv.city,
+        address: adv.address,
+        tel: adv.tel,
+        post_code: adv.post_code
+      }
+    }
+
+    $scope.getAdvertisers = function() {
+      get.advertisers().then(function(data) {
+        $scope.allData.advertisers = data.data;
+        $scope.advVisibility = 'visible';
+      });
+    }
+
+    $scope.deleteAdv = function(ind) {
+      del.advertiser(ind);
+      getAllPixels();
+    }
+
+    $scope.addPixel =function(ind) {
+      var form = document.getElementById('addPixel' + ind);
+      var data = "name=" + form.name.value +
+      "&advertiser_id=" + ind;
+
+      post.pixels(data, function() {
+        getAllPixels();
+        form.reset();
+      });
+    }
+
+    $scope.deletePixel = function(ind) {
+      del.pixel(ind);
+      getAllPixels();
+    }
+
+    $scope.openPixel = function(ind) {
+      get.pixel(ind).then(function(data) {
+        $scope.allData.currentPixel = data.data;
+        $scope.pixelPopup = 'open';
+      });
+    }
+
+    function getAllPixels() {
+      get.pixels().then(function(data) {
+        $scope.allData.pixels = data.data;
+      });
+    }
+
+    $scope.getAdvertisers();
+    getAllPixels();
   }
+]);
 
-  $scope.addOrUpdateAdv = function(event) {
-    var data = "name=" + $scope.data.name +
-    "&address=" + $scope.data.address +
-    "&tel=" + $scope.data.tel +
-    "&post_code=" + $scope.data.post_code +
-    "&city=" + $scope.data.city;
+myApp.controller('addAdvController', [
+  '$scope',
+  'appPostServices',
+  'appPutServices',
+  'mainData',
+  function($scope, post, put, mainData) {
+    $scope.allData = mainData;
 
-    post.advertisers(data, function() {
+    function resetForm() {
+      $scope.allData.formData = {
+        name: '',
+        city: '',
+        address: '',
+        tel: '',
+        post_code: ''
+      }
+      $scope.allData.currentAdv = null;
       $scope.$parent.addAdvertVisible = 'close';
       $scope.$parent.getAdvertisers();
-    });
+    }
+
+    $scope.addOrUpdateAdv = function() {
+      var tempObj = $scope.allData.formData;
+      var data = "name=" + tempObj.name +
+      "&address=" + tempObj.address +
+      "&tel=" + tempObj.tel +
+      "&post_code=" + tempObj.post_code +
+      "&city=" + tempObj.city;
+
+      if ($scope.allData.currentAdv !== null) {
+        put.advertiser($scope.allData.currentAdv, data).then(resetForm);
+      }
+      else {
+        post.advertisers(data).then(resetForm);
+      }
+    }
+
+    $scope.closeForm = function() {
+      $scope.$parent.addAdvertVisible = 'closed';
+      resetForm();
+    }
+
+    resetForm();
   }
+]);
 
-  setDefaults();
 
-}]);
+//Model for all data
+myApp.factory('mainData', function() {
+  return {
+    advertisers: [],
+    pixels: [],
+    currentAdv: null
+  }
+});
 
 myApp.factory('appGetServices', function($http) {
   return {
@@ -73,7 +148,7 @@ myApp.factory('appGetServices', function($http) {
        });
     },
     pixel: function(n) {
-      return $http.get('/pixel/' + n).then(function(result) {
+      return $http.get('/pixels/' + n).then(function(result) {
            return result.data;
        });
     }
@@ -102,13 +177,6 @@ myApp.factory('appPostServices', function($http) {
         error(function(data) {
           console.log(data);
         });
-    },
-    pixel: function(n, data, callback) {
-      return $http.post('/pixel/' + n, data).
-        success(callback).
-        error(function(data) {
-          console.log(data);
-        });
     }
   }
 });
@@ -121,7 +189,17 @@ myApp.factory('appDeleteServices', function($http) {
        });
     },
     pixel: function(n) {
-      return $http.delete('/pixel/' + n).then(function(result) {
+      return $http.delete('/pixels/' + n).then(function(result) {
+           return result.data;
+       });
+    }
+  }
+});
+
+myApp.factory('appPutServices', function($http) {
+  return {
+    advertiser: function(n, data) {
+      return $http.put('/advertisers/' + n, data).then(function(result) {
            return result.data;
        });
     }

@@ -205,8 +205,11 @@ def javascripts(filename):
 
 @route('/')
 def index():
-    return template("index.html")
+    return static_file("index.html", "")
 
+@get('/<filename:re:.*\.html>')
+def html(filename):
+    return static_file(filename, root='')
 
 @get('/<filename:re:.*\.css>')
 def stylesheets(filename):

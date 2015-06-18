@@ -3,48 +3,75 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test task for Affectv</title>
-	<link rel="stylesheet" type="text/css" href="main.css">	
+	<link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body ng-controller="CommonController as commonCtrl">
 	<header class="site-header">
+		<h1>Welcome to amazing pixels manipulator</h1>
 		<button class="btn add-btn" ng-click="openAddAdvertiser()">+ Add advertiser</button>
 	</header>
 	<section class="wrapper">
 		<div class="main-content">
 			<ul class="main-items" ng-class="advVisibility">
-				<li ng-repeat="adv in advertisers" data-id="adv.id">
+				<li ng-repeat="adv in allData.advertisers" data-id="adv.id">
+					<h2 ng-bind="adv.name"></h2>
 					<ul>
-						<li ng-show="adv.name">Name: <strong ng-bind="adv.name"></strong></li>
 						<li ng-show="adv.city">City: <strong ng-bind="adv.city"></strong></li>
 						<li ng-show="adv.address">Address: <strong ng-bind="adv.address"></strong></li>
 						<li ng-show="adv.post_code">Post code: <strong ng-bind="adv.post_code"></strong></li>
 						<li ng-show="adv.tel">Telephone: <strong ng-bind="adv.tel"></strong></li>
 					</ul>
-					<button ng-click="deleteAdv(adv.id)">Delete advertiser</button>				
+					<div class="block-aside pixels">
+						<h3>Pixels:</h3>
+						<ul class="pixels-list">
+							<li ng-repeat="pixel in allData.pixels | filter:{advertiser_id:adv.id}">
+								<a href="" ng-bind="pixel.name" ng-click="openPixel(pixel.id)"></a>
+								<a href="" ng-click="deletePixel(pixel.id)">x</a>
+							</li>
+						</ul>
+					</div>
+
+					<form class="add-pixel"  id="addPixel{{adv.id}}" ng-submit="addPixel(adv.id)">
+						<input type="text" name="name">
+						<input type="submit" value="Add pixel">
+					</form>
+
+					<button class="delete-btn" ng-click="deleteAdv(adv.id)" title="Delete advertiser">x</button>
+					<button class="btn main-btn" ng-click="openEditAdvertiser(adv)">Edit</button>
 				</li>
 			</ul>
 		</div>
 	</section>
+
 	<footer class="site-footer"></footer>
+
+	<div class="popup-wrapper" ng-class="pixelPopup">
+		<div class="popup popup-pixel">
+			<a href="#" class="close-popup" ng-click="pixelPopup = 'closed'">x</a>
+			<h4 ng-bind="allData.currentPixel.pixel.name"></h4>
+			<p>Fires: <strong ng-bind="allData.currentPixel.fires"></strong></p>
+		</div>
+	</div>
+
 	<div class="popup-wrapper" ng-class="$parent.addAdvertVisible" ng-controller="addAdvController">
 		<div class="popup popup-form">
-			<a href="#" class="close-popup" ng-click="$parent.addAdvertVisible = 'closed'">x</a>
+			<a href="#" class="close-popup" ng-click="closeForm()">x</a>
 			<form id="addOrUpdateAdv" ng-submit="addOrUpdateAdv($event)">
 				<ul>
 					<li>
-						<label>Name: <input type="text" name="name" ng-model="data.name"></label>
+						<label>Name: <input type="text" name="name" ng-model="allData.formData.name"></label>
 					</li>
 					<li>
-						<label>City: <input type="text" name="city" ng-model="data.city"></label>
+						<label>City: <input type="text" name="city" ng-model="allData.formData.city"></label>
 					</li>
 					<li>
-						<label>Address: <input type="text" name="address" ng-model="data.address"></label>
+						<label>Address: <input type="text" name="address" ng-model="allData.formData.address"></label>
 					</li>
 					<li>
-						<label>Post code: <input type="text" name="data.post_code" ng-model="post_code"></label>
+						<label>Post code: <input type="text" name="post_code" ng-model="allData.formData.post_code"></label>
 					</li>
 					<li>
-						<label>Telephone: <input type="text" name="data.tel" ng-model="tel"></label>
+						<label>Telephone: <input type="text" name="tel" ng-model="allData.formData.tel"></label>
 					</li>
 				</ul>
 				<input type="submit" value="Submit">
