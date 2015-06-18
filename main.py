@@ -107,6 +107,7 @@ def getone_update_advertiser(id):
         advertiser.address = form['address']
         advertiser.city = form['city']
         advertiser.tel = form['tel']
+        advertiser.post_code = form['post_code']
 
         session.commit()
 
